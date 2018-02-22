@@ -2,21 +2,21 @@ import { ConcatSource } from 'webpack-sources';
 import * as webpack from 'webpack';
 
 export interface JSEvaluationMarksOptions {
-  namePrefix?:string;
+  namePrefix?: string;
 }
 
 // A named JavaScript function.
 export default class JSEvaluationMarksPlugin {
-  private _prefix:string;
+  private _prefix: string;
 
-  constructor(options:JSEvaluationMarksOptions = {}) {
+  constructor(options: JSEvaluationMarksOptions = {}) {
     this._prefix = options.namePrefix || `js_evaluation_`;
   }
 
-  apply(compiler:webpack.Compiler) {
+  apply(compiler: webpack.Compiler) {
     // Specifies webpack's event hook to attach itself.
-    compiler.plugin('emit', (compilation:any, callback) => {
-      compilation.chunks.forEach((chunk:any) => {
+    compiler.plugin('emit', (compilation: any, callback) => {
+      compilation.chunks.forEach((chunk: any) => {
         const filepath = compilation.getPath(compilation.options.output.filename, { chunk });
 
         const name = chunk.name.replace(/\./g, '_');
