@@ -1,6 +1,6 @@
 {
   "name": "webpack-js-evaluation-marks",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Adds performance.marks at the beginning and end of webpack bundles to measure JS evaluation time",
   "license": "Apache-2.0",
   "files": [
