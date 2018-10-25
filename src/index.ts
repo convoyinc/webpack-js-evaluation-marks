@@ -17,23 +17,30 @@ export default class JSEvaluationMarksPlugin {
     // Specifies webpack's event hook to attach itself.
     compiler.plugin('emit', (compilation: any, callback) => {
       compilation.chunks.forEach((chunk: any) => {
-        const filepath = compilation.getPath(compilation.options.output.filename, { chunk });
+        const filepath = compilation.getPath(
+          compilation.options.output.filename,
+          { chunk },
+        );
 
+        // chunk.name can be empty sometimes. In those cases, we will not insert marks. Only names chunks would be inspected for marks. Unnamed marks are useless.//#endregion
+        if (!chunk.name) return;
         const name = chunk.name.replace(/\./g, '_');
         const markName = this._prefix + name;
 
-        const beforeContent = `;\n` +
-        `var __jsEvaluationMarkGlobal = typeof global === 'object' ? global : window;` +
-        `__jsEvaluationMarkGlobal.performance && ` +
+        const beforeContent =
+          `;\n` +
+          `var __jsEvaluationMarkGlobal = typeof global === 'object' ? global : window;` +
+          `__jsEvaluationMarkGlobal.performance && ` +
           `__jsEvaluationMarkGlobal.performance.mark && ` +
           `__jsEvaluationMarkGlobal.performance.mark('${markName}_start'); `;
 
-        const afterContent = `;\n` +
+        const afterContent =
+          `;\n` +
           `__jsEvaluationMarkGlobal.performance && __jsEvaluationMarkGlobal.performance.mark && ` +
           `__jsEvaluationMarkGlobal.performance.mark('${markName}_end'); ` +
           `__jsEvaluationMarkGlobal.performance && ` +
-            `__jsEvaluationMarkGlobal.performance.measure && ` +
-            `__jsEvaluationMarkGlobal.performance.measure('${markName}', '${markName}_start', '${markName}_end'); `;
+          `__jsEvaluationMarkGlobal.performance.measure && ` +
+          `__jsEvaluationMarkGlobal.performance.measure('${markName}', '${markName}_start', '${markName}_end'); `;
 
         compilation.assets[filepath] = new ConcatSource(
           beforeContent,
@@ -45,5 +52,4 @@ export default class JSEvaluationMarksPlugin {
       callback();
     });
   }
-
 }
