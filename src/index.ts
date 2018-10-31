@@ -22,7 +22,9 @@ export default class JSEvaluationMarksPlugin {
           { chunk },
         );
 
-        // chunk.name can be empty sometimes. In those cases, we will not insert marks. Only names chunks would be inspected for marks. Unnamed marks are useless.//#endregion
+        // chunk.name can be empty sometimes. In those cases, we will not insert
+        // marks. Only names chunks would be inspected for marks. Unnamed marks
+        // are useless.//#endregion
         if (!chunk.name) return;
         const name = chunk.name.replace(/\./g, '_');
         const markName = this._prefix + name;
